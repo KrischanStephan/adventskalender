@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Adventskalender</title>
+    <style>
+        .kalender{
+            display: flex;
+            /*flex-direction: column;*/
+            flex-wrap: wrap;
+        }
+        .toerchen{
+            height: 300px;
+            width: 300px;
+            border: 1px solid red;
+            align-self: center;
+            font-size: 200px;
+            text-align: center;
+            background-color: gray;
+        }
+        header{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #buttonLock{
+            background-color: green;
+        }
+    </style>
+
+    <script type="module">
+        let datumsLock = true;
+        let datumSim = false;
+
+        const lockButton = document.getElementById('buttonLock');
+        lockButton.addEventListener('click', ()=>{
+            if(datumsLock){
+                datumsLock = false;
+                lockButton.style.backgroundColor = 'red';
+                lockButton.textContent = 'Datumslock EIN';
+            } else {
+                datumsLock = true;
+                lockButton.style.backgroundColor = 'green';
+                lockButton.textContent = 'Datumslock AUS';
+                window.location.reload();
+            }
+        });
+
+        const simButton = document.getElementById('buttonSim');
+        simButton.addEventListener('click', ()=>{
+            if(datumSim){
+                datumSim = false;
+                window.location.reload();
+            } else {
+                datumSim = true;
+                simButton.style.backgroundColor = 'red';
+                simButton.textContent = 'Echt Zeit';
+            }
+        });
+
+        const emojis = [
+            '😀', '😁', '😂', '😃', '😄', '😅', '😆', '😉', '😊', '🙂',
+            '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋',
+            '😛', '😜', '😝', '🤤', '🥴', '🤨'
+        ]
+
+
+        const kalender = document.querySelector('.kalender');
+
+        function holeDatum(){
+            let date = new Date();
+            if (datumSim){
+                date = new Date("2023-12-12");
+            }
+
+            console.log('Tag: ' + date.getDate() + ', Monat: ' + date.getMonth());
+            return date;
+        }
+
+        for (let i = 1; i <= 24; i++) {
+            const id = 'tag' + i;
+
+            const neuesToerchen = document.createElement('div');
+            neuesToerchen.setAttribute('id', id)
+            neuesToerchen.setAttribute('class', 'toerchen');
+            neuesToerchen.textContent = i +'.'
+
+            kalender.appendChild(neuesToerchen);
+
+            const toerchen = document.getElementById(id);
+            toerchen.addEventListener('click', ()=>{
+
+                const date = holeDatum();
+                const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
+
+                if(esIstSoWeit || !datumsLock){
+                    toerchen.textContent = emojis[i];
+                }
+            });
+            toerchen.addEventListener('mouseover', ()=>{
+
+                const date = holeDatum();
+
+                const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
+                if(esIstSoWeit || !datumsLock){
+                    toerchen.style.backgroundColor = 'green'
+                } else {
+                    toerchen.style.backgroundColor = 'red'
+                }
+            });
+            toerchen.addEventListener('mouseout', ()=>{
+                toerchen.style.backgroundColor = 'grey'
+            });
+        }
+
+
+
+    </script>
+
+    <script>
+
+    </script>
+
+</head>
+<body>
+    <header>
+        <h1>Adventskalender</h1>
+        <button id="buttonLock">Datumslock AUS</button>
+        <button id="buttonSim">Datum auf 12.12</button>
+    </header>
+    <section class="kalender">
+<!--        <div class="toerchen" id="tag1">1.</div>-->
+    </section>
+</body>
+</html>
