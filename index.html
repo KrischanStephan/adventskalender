@@ -10,15 +10,17 @@
             justify-content: center;
         }
         .toerchen{
-            height: 200px;
-            width: 200px;
-            border: 1px solid red;
+            height: 180px;
+            width: 180px;
+            /*border: 1px solid red;*/
             align-self: center;
             font-size: 50px;
-            /*background-color: darkgreen;*/
-            background-image: linear-gradient(280deg, green, darkgreen);
+            /*background-color: green 0.5;*/
+            background-color: rgba(255, 255, 255, 0.5);
+            /*background-image: linear-gradient(300deg, green, transparent);*/
             margin: 3px;
             border-radius: 5px;
+            padding: 15px;
         }
         header{
             display: flex;
@@ -31,7 +33,9 @@
         }
 
         body{
-            background-image: linear-gradient(280deg, red,lightgreen, darkgreen);
+            background-image: url("bild.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
             background-attachment: fixed;
         }
     </style>
@@ -133,13 +137,13 @@
 
                 const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
                 if (esIstSoWeit || !datumsLock) {
-                    toerchen.style.backgroundImage = 'linear-gradient(280deg, lightgrey,darkgreen, darkgreen)'
+                    toerchen.style.backgroundColor = 'rgba(0, 255, 0, 0.5)'
                 } else {
-                    toerchen.style.backgroundImage = 'linear-gradient(280deg, red, darkgreen, darkgreen)'
+                    toerchen.style.backgroundColor = 'rgba(255, 0, 0, 0.5)'
                 }
             });
             toerchen.addEventListener('mouseout', () => {
-                toerchen.style.backgroundImage = 'linear-gradient(280deg, green, darkgreen)'
+                toerchen.style.backgroundColor = 'rgba(255, 255, 255, 0.5)'
             });
         }
 
