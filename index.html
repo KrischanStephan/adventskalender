@@ -6,18 +6,19 @@
     <style>
         .kalender{
             display: flex;
-            /*flex-direction: column;*/
             flex-wrap: wrap;
             justify-content: center;
         }
         .toerchen{
-            height: 250px;
-            width: 250px;
+            height: 200px;
+            width: 200px;
             border: 1px solid red;
             align-self: center;
-            font-size: 200px;
-            text-align: center;
-            background-color: darkgreen;
+            font-size: 50px;
+            /*background-color: darkgreen;*/
+            background-image: linear-gradient(280deg, green, darkgreen);
+            margin: 3px;
+            border-radius: 5px;
         }
         header{
             display: flex;
@@ -27,6 +28,11 @@
 
         #buttonLock{
             background-color: green;
+        }
+
+        body{
+            background-image: linear-gradient(280deg, red,lightgreen, darkgreen);
+            background-attachment: fixed;
         }
     </style>
 
@@ -60,11 +66,32 @@
             }
         });
 
-        const emojis = [
-            '😀', '😁', '😂', '😃', '😄', '😅', '😆', '😉', '😊', '🙂',
-            '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋',
-            '😛', '😜', '😝', '🤤', '🥴', '🤨'
-        ]
+        const adventskalender = [
+            '🎁 Genieße die Feiertage! 🎁',
+            '🎅 Habt einen schönen Tag! 🎅',
+            '❄️ Bleibt gesund! ❄️',
+            '🧣 Macht es euch gemütlich! 🧣',
+            '☕️ Lasst es euch gut gehen! ☕️',
+            '🎄 Genießt die Zeit mit euren Lieben! 🎄',
+            '🎁 Habt einen schönen Advent! 🎁',
+            '🎅 Macht euch keine Sorgen! 🎅',
+            '🎉 Freut euch auf das neue Jahr! 🎉',
+            '✨ Bleibt positiv! ✨',
+            '🧣 Habt einen guten Rutsch! 🧣',
+            '🎄 Genießt die Feiertage! 🎄',
+            '🎁 Macht es euch gemütlich! 🎁',
+            '☕️ Lasst es euch gut gehen! ☕️',
+            '🎄 Genießt die Zeit mit euren Lieben! 🎄',
+            '🎁 Habt einen schönen Advent! 🎁',
+            '🎅 Macht euch keine Sorgen! 🎅',
+            '🎉 Freut euch auf das neue Jahr! 🎉',
+            '✨ Bleibt positiv! ✨',
+            '🧣 Habt einen guten Rutsch! 🧣',
+            '🎁 Macht es euch gemütlich! 🎁',
+            '☕️ Lasst es euch gut gehen! ☕️',
+            '🎄 Genießt die Feiertage! 🎄',
+            '🎄 Frohe Weihnachten! 🎄'
+        ];
 
 
         const kalender = document.querySelector('.kalender');
@@ -79,40 +106,51 @@
             return date;
         }
 
-        for (let i = 1; i <= 24; i++) {
-            const id = 'tag' + i;
-
+        function erstelleNeuesToerchen(id, i) {
             const neuesToerchen = document.createElement('div');
             neuesToerchen.setAttribute('id', id)
             neuesToerchen.setAttribute('class', 'toerchen');
-            neuesToerchen.textContent = i +'.'
-
+            neuesToerchen.textContent = i + '.'
             kalender.appendChild(neuesToerchen);
+        }
+
+        function addClickEventToToerchen(toerchen, i) {
+            toerchen.addEventListener('click', () => {
+
+                const date = holeDatum();
+                const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
+
+                if (esIstSoWeit || !datumsLock) {
+                    toerchen.textContent = adventskalender[i-1];
+                    toerchen.style.fontSize = '34px';
+                }
+            });
+        }
+
+        function addMouseOverEventToToerchen(toerchen, i) {
+            toerchen.addEventListener('mouseover', () => {
+                const date = holeDatum();
+
+                const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
+                if (esIstSoWeit || !datumsLock) {
+                    toerchen.style.backgroundImage = 'linear-gradient(280deg, lightgrey,darkgreen, darkgreen)'
+                } else {
+                    toerchen.style.backgroundImage = 'linear-gradient(280deg, red, darkgreen, darkgreen)'
+                }
+            });
+            toerchen.addEventListener('mouseout', () => {
+                toerchen.style.backgroundImage = 'linear-gradient(280deg, green, darkgreen)'
+            });
+        }
+
+        for (let i = 1; i <= 24; i++) {
+            const id = 'tag' + i;
+
+            erstelleNeuesToerchen(id, i);
 
             const toerchen = document.getElementById(id);
-            toerchen.addEventListener('click', ()=>{
-
-                const date = holeDatum();
-                const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
-
-                if(esIstSoWeit || !datumsLock){
-                    toerchen.textContent = emojis[i];
-                }
-            });
-            toerchen.addEventListener('mouseover', ()=>{
-
-                const date = holeDatum();
-
-                const esIstSoWeit = date.getMonth() === 11 && date.getDate() >= i;
-                if(esIstSoWeit || !datumsLock){
-                    toerchen.style.backgroundColor = 'green'
-                } else {
-                    toerchen.style.backgroundColor = 'red'
-                }
-            });
-            toerchen.addEventListener('mouseout', ()=>{
-                toerchen.style.backgroundColor = 'darkgreen'
-            });
+            addClickEventToToerchen(toerchen, i);
+            addMouseOverEventToToerchen(toerchen, i);
         }
 
 
@@ -126,12 +164,13 @@
 </head>
 <body>
     <header>
-        <h1>Adventskalender</h1>
-        <button id="buttonLock">Datumslock AUS</button>
-        <button id="buttonSim">Datum auf 12.12</button>
+        <h1>✨Adventskalender✨</h1>
+
     </header>
     <section class="kalender">
 <!--        <div class="toerchen" id="tag1">1.</div>-->
     </section>
+    <button id="buttonLock">Datumslock AUS</button>
+    <button id="buttonSim">Datum auf 12.12</button>
 </body>
 </html>
